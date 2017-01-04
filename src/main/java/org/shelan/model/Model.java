@@ -1,6 +1,7 @@
 package org.shelan.model;
 
-import java.sql.Timestamp;
+import org.shelan.exception.AuthentcatorException;
+
 import java.util.List;
 
 /**
@@ -8,12 +9,14 @@ import java.util.List;
  */
 public interface Model {
 
-    public void addUser();
+    public boolean addUser(String username, String hash) throws AuthentcatorException;
 
-    public boolean userExisit();
+    public boolean userExisit(String username) throws AuthentcatorException;
 
-    public List<Timestamp> getlastLoginAttempts(int noOfLastSuccessAttempts);
+    public List<AccessLog> getlastLoginAttempts(String username, int noOfLastSuccessAttempts) throws AuthentcatorException;
 
-    public String getPasswordHash(String username);
+    public String getPasswordHash(String username) throws AuthentcatorException;
+
+    public boolean addAccessLog(String username, boolean isSuccesful) throws AuthentcatorException;
 
 }

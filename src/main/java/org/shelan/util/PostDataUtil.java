@@ -9,6 +9,12 @@ import java.util.Map;
 public class PostDataUtil {
 
 
+    /**
+     * generating keyvalue map pair from post body format
+     * Post data format is "key=value&key2=value2"
+     * @param body
+     * @return
+     */
     public static Map<String,String> getPostData(String body){
         HashMap map = new HashMap();
         String [] kvPairs = body.split("&");

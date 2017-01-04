@@ -1,6 +1,7 @@
 package org.shelan.model;
 
-import java.sql.Timestamp;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -8,7 +9,31 @@ import java.util.UUID;
  * Created by shelan on 1/4/17.
  */
 public class AccessLog {
-    private Timestamp timestamp;
-    private UUID userId;
+    private Date timestamp;
+    private String username;
     private boolean loggingSuccess;
+
+    public Date getTimestamp() {
+        return this.timestamp;
+    }
+
+    public void setTimestamp(Date date) {
+        this.timestamp = date;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isLoggingSuccess() {
+        return loggingSuccess;
+    }
+
+    public void setLoggingSuccess(boolean loggingSuccess) {
+        this.loggingSuccess = loggingSuccess;
+    }
 }
