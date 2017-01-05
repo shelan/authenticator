@@ -55,11 +55,15 @@ public class Sql2oModel implements Model {
     public List<AccessLog> getlastLoginAttempts(String username, int noOfLastSuccessAttempts) throws
             AuthentcatorException {
         String checkUserSql =
-                "SELECT timestamp FROM accesslog WHERE username=:username AND  ORDER BY timestamp LIMIT 5";
+                "SELECT username,timestamp,loggingSuccess FROM accesslog WHERE username=:username AND " +
+                        "loggingSuccess=1 " +
+                        "ORDER BY timestamp DESC " +
+                        "LIMIT :limit";
 
         try (Connection con = sql2o.open()) {
             List<AccessLog> loginAttempts = con.createQuery(checkUserSql)
                     .addParameter("username", username)
+                    .addParameter("limit",noOfLastSuccessAttempts)
                     .executeAndFetch(AccessLog.class);
 
             return loginAttempts;
@@ -92,7 +96,7 @@ public class Sql2oModel implements Model {
 
         String insertSql =
                 "INSERT INTO accesslog(username, loggingSuccess) " +
-                        "VALUES (:username, :hash)";
+                        "VALUES (:username, :loggingSuccess)";
 
         //converting success to 0 or 1
         int successCode = isSuccesful ? 1 : 0;

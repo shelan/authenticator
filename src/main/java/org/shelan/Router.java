@@ -5,16 +5,14 @@ package org.shelan; /**
 import static spark.Spark.get;
 import static spark.Spark.post;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
 import org.shelan.model.AccessLog;
 import org.shelan.util.PostDataUtil;
-import spark.Request;
-import spark.Response;
-import spark.Route;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static spark.Spark.*;
 
 public class Router {
 
@@ -26,6 +24,18 @@ public class Router {
     }
 
     private void registerRoutes() {
+
+        before("/getLogins/*", (request, response) -> {
+            // ... check if authenticated
+
+            //TODO : move this to controller and handle corner cases;
+            String bearer = request.headers("Authorization");
+            if (bearer == null || bearer.split(" ").length != 2) {
+
+                halt(401, "Unauthorized Access!");
+            }
+        });
+
 
         post("/register", (request, response) -> {
             Map<String, String> values = PostDataUtil.getPostData(request.body());
@@ -48,12 +58,14 @@ public class Router {
 
         post("/authenticate", ((request, response) -> {
             Map<String, String> values = PostDataUtil.getPostData(request.body());
-            Status status = controller.authenticate(values.get("username"), values.get("password"));
+            String username = values.get("username");
+            String password = values.get("password");
+            Status status = controller.authenticate(username, password);
 
             switch (status) {
                 case SUCCESS:
                     response.status(200);
-                    return "successfully authenticated";
+                    return controller.generateToken(username);
                 case FAILED:
                     response.status(403);
                     return "Authentication Failure";
@@ -63,9 +75,14 @@ public class Router {
             }
         }));
 
-        get("/getLogins/:username", ((request, response) -> {
+        get("/getLogins", ((request, response) -> {
+            String bearer = request.headers("Authorization");
+            String user = controller.getUserFromJwtToken(bearer);
+            if(user == null || user.isEmpty()){
+                halt(401, "Unauthorized Access!");
+            }
             Map<String, String> values = PostDataUtil.getPostData(request.body());
-            List<AccessLog> logItems = controller.getLastLoginAttempts(request.params(":username"));
+            List<AccessLog> logItems = controller.getLastLoginAttempts(user);
             JsonArray jsonArray = new JsonArray();
             for (AccessLog logItem : logItems) {
                 jsonArray.add(logItem.getTimestamp().toString());
