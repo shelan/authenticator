@@ -11,7 +11,18 @@
 
 ## Strating Auth service
 
-* Start authenticator service. 
+* Start authenticator service (with default parameteres). 
 
 `java -jar path_to_authenticator-1.0-SNAPSHOT-jar-with-dependencies.jar org.shelan
-.client.AuthClient -p root`
+.client.AuthClient`
+
+you can provide following optional parameters
+
+```
+-dbhost database host
+-dbport database port
+-dbname database name
+-port application port
+-u database username
+-p database password
+```
