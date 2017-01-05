@@ -16,14 +16,14 @@ import static spark.Spark.*;
 
 public class Router {
 
-    Controller controller;
+    private Controller controller;
 
-    public Router() {
-        this.controller = new Controller();
-        registerRoutes();
+    public Router(Controller controller, int port) {
+        this.controller = controller;
+        port(port);
     }
 
-    private void registerRoutes() {
+    public void registerRoutes() {
 
         before("/getLogins/*", (request, response) -> {
             // ... check if authenticated
@@ -60,6 +60,9 @@ public class Router {
             Map<String, String> values = PostDataUtil.getPostData(request.body());
             String username = values.get("username");
             String password = values.get("password");
+            if (username == null || password == null) {
+                return "username or password cannot be empty or null";
+            }
             Status status = controller.authenticate(username, password);
 
             switch (status) {
@@ -77,8 +80,11 @@ public class Router {
 
         get("/getLogins", ((request, response) -> {
             String bearer = request.headers("Authorization");
+            if (bearer == null) {
+                halt(401, "Unauthorized Access!! Please pass valid Authorization header with JWT token");
+            }
             String user = controller.getUserFromJwtToken(bearer);
-            if(user == null || user.isEmpty()){
+            if (user == null || user.isEmpty()) {
                 halt(401, "Unauthorized Access!");
             }
             Map<String, String> values = PostDataUtil.getPostData(request.body());

@@ -27,7 +27,12 @@ import static spark.Spark.halt;
  */
 public class Controller {
 
-    Model model = new Sql2oModel();
+    Model model;
+
+    public Controller(Model model) {
+        this.model = model;
+    }
+
     Logger logger = LoggerFactory.getLogger(Controller.class);
 
     public Status addNewUser(String username, String password) {

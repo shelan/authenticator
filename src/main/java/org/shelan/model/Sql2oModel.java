@@ -14,8 +14,8 @@ public class Sql2oModel implements Model {
 
     private Sql2o sql2o;
 
-    public Sql2oModel() {
-        this.sql2o = new Sql2o("jdbc:mysql://localhost:3306/auth", "root", "");
+    public Sql2oModel(String host, int port, String dbname, String username, String password) {
+        this.sql2o = new Sql2o("jdbc:mysql://" + host + ":" + port + "/" + dbname, username, password);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Sql2oModel implements Model {
         try (Connection con = sql2o.open()) {
             List<AccessLog> loginAttempts = con.createQuery(checkUserSql)
                     .addParameter("username", username)
-                    .addParameter("limit",noOfLastSuccessAttempts)
+                    .addParameter("limit", noOfLastSuccessAttempts)
                     .executeAndFetch(AccessLog.class);
 
             return loginAttempts;
