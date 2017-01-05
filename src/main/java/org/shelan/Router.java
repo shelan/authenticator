@@ -2,9 +2,6 @@ package org.shelan; /**
  * Created by shelan on 1/4/17.
  */
 
-import static spark.Spark.get;
-import static spark.Spark.post;
-
 import com.google.gson.JsonArray;
 import org.shelan.model.AccessLog;
 import org.shelan.util.PostDataUtil;
@@ -14,6 +11,9 @@ import java.util.Map;
 
 import static spark.Spark.*;
 
+/**
+ * Main router class for the application
+ */
 public class Router {
 
     private Controller controller;

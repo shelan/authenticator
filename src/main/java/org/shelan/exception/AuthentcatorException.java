@@ -1,7 +1,7 @@
 package org.shelan.exception;
 
 /**
- * Created by shelan on 1/4/17.
+ * Wrapper Exception class
  */
 public class AuthentcatorException extends Exception {
 

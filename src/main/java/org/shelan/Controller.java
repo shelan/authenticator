@@ -9,25 +9,24 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.shelan.exception.AuthentcatorException;
 import org.shelan.model.AccessLog;
 import org.shelan.model.Model;
-import org.shelan.model.Sql2oModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Date;
 import java.util.List;
-
-import static spark.Spark.halt;
 
 
 /**
- * Created by shelan on 1/4/17.
+ * Main Controller file
  */
 public class Controller {
 
-    Model model;
+    private Model model;
+    //TODO : get this form a secure place NOT store here
+    private final String secret = "aahhanvio738fh.a83ohf73yo!u3y5oaiyt5o!qHha.aojfy5oihaoidya485f83y8fh8y4#4dDSa";
 
     public Controller(Model model) {
         this.model = model;
@@ -66,7 +65,7 @@ public class Controller {
         String passwordHash = null;
         try {
             passwordHash = model.getPasswordHash(username);
-            if (passwordHash != null && BCrypt.checkpw(password, passwordHash)) {
+            if ((passwordHash != null || !passwordHash.isEmpty()) && BCrypt.checkpw(password, passwordHash)) {
                 model.addAccessLog(username, true);
                 return Status.SUCCESS;
             } else {
@@ -84,6 +83,9 @@ public class Controller {
             String token = JWT.create()
                     .withIssuer("auth0")
                     .withClaim("username", username)
+                    //expires after 5 minutes
+                    //TODO get this from a configuration file
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
                     .sign(Algorithm.HMAC256("secret"));
             return token;
         } catch (JWTCreationException exception) {
@@ -110,6 +112,7 @@ public class Controller {
             return jwt.getClaim("username").asString();
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
+            logger.error(exception.getMessage(), exception);
             return null;
         } catch (UnsupportedEncodingException e) {
             logger.error("Error while encoding jwt", e);

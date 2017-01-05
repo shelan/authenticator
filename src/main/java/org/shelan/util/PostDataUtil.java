@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by shelan on 1/4/17.
+ * Utility class for postData
  */
 public class PostDataUtil {
-
 
     /**
      * generating keyvalue map pair from post body format

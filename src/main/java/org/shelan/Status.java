@@ -1,7 +1,7 @@
 package org.shelan;
 
 /**
- * Created by shelan on 1/4/17.
+ * Status indicators for the API
  */
 public enum Status {
     USER_EXISTS,NOT_VALID,SUCCESS, FAILED

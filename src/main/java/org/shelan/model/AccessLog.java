@@ -1,12 +1,10 @@
 package org.shelan.model;
 
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 /**
- * Created by shelan on 1/4/17.
+ * Access Log model
  */
 public class AccessLog {
     private Date timestamp;

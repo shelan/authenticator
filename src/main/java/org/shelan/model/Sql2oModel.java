@@ -8,7 +8,7 @@ import org.sql2o.Sql2oException;
 import java.util.List;
 
 /**
- * Created by shelan on 1/4/17.
+ * SQL2O implementation of the model using mysql
  */
 public class Sql2oModel implements Model {
 
@@ -16,6 +16,10 @@ public class Sql2oModel implements Model {
 
     public Sql2oModel(String host, int port, String dbname, String username, String password) {
         this.sql2o = new Sql2o("jdbc:mysql://" + host + ":" + port + "/" + dbname, username, password);
+    }
+
+    public Sql2oModel(String url, String dbname, String username, String password) {
+        this.sql2o = new Sql2o(url + dbname, username, password);
     }
 
     @Override

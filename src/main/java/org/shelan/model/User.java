@@ -1,7 +1,7 @@
 package org.shelan.model;
 
 /**
- * Created by shelan on 1/4/17.
+ * User Model
  */
 public class User {
     private String username;

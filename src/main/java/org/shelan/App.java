@@ -8,11 +8,15 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.shelan.model.Model;
 import org.shelan.model.Sql2oModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Created by shelan on 1/4/17.
+ * Main Application for Authenticator
  */
 public class App {
+
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
 
@@ -67,7 +71,7 @@ public class App {
 
 
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Error while parsing", e);
         }
 
 
